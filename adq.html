@@ -1,0 +1,204 @@
+<!-- VERSION MEJORADA CON:
+- Filtros múltiples
+- Filtro por proyecto
+- Tab Licitaciones
+- Tab Distribución
+- Mejoras visuales
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adquisiciones 2026 PRO</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui;background:#f5f5f3;color:#1a1a1a}
+:root{--bg1:#fff;--bg2:#f1efe8;--t1:#1a1a1a;--t2:#5f5e5a;--b1:rgba(0,0,0,0.1)}
+
+header{padding:1rem 1.5rem;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between}
+.container{padding:1.5rem;max-width:1300px;margin:auto}
+
+.tabs{display:flex;gap:6px;margin-bottom:1rem}
+.tab{padding:8px 14px;border:none;cursor:pointer;background:none}
+.tab.active{border-bottom:2px solid black}
+
+.card{background:#fff;border:1px solid var(--b1);border-radius:10px;padding:1rem;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.05);transition:.2s}
+.card:hover{transform:translateY(-2px)}
+
+.filters{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.filters select,.filters input{padding:6px;border-radius:6px;border:1px solid #ccc}
+
+</style>
+</head>
+
+<body>
+<header>
+  <h2>Adquisiciones 2026 PRO</h2>
+  <button onclick="cargarDatos()">Actualizar</button>
+</header>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('equipos')">Equipos</button>
+  <button class="tab" onclick="showTab('licitaciones')">Licitaciones</button>
+  <button class="tab" onclick="showTab('distribucion')">Distribución</button>
+</div>
+
+<!-- TAB EQUIPOS -->
+<div id="tab-equipos">
+  <div class="filters">
+    <input id="search" placeholder="Buscar..." oninput="renderTabla()">
+
+    <select id="f-estado" multiple onchange="renderTabla()"></select>
+    <select id="f-hosp" multiple onchange="renderTabla()"></select>
+    <select id="f-tipo" multiple onchange="renderTabla()"></select>
+    <select id="f-proy" multiple onchange="renderTabla()"></select>
+  </div>
+
+  <div id="tabla"></div>
+</div>
+
+<!-- TAB LICITACIONES -->
+<div id="tab-licitaciones" style="display:none">
+  <div id="licitaciones"></div>
+</div>
+
+<!-- TAB DISTRIBUCION -->
+<div id="tab-distribucion" style="display:none">
+  <div id="distribucion"></div>
+</div>
+
+</div>
+
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbzD-hJkihX-7wLb4DqUfGCYtIYRWEc2VdziaJ5h0EbMnZhCZAaKx67aoCCLY-Os7jD3/exec';
+
+var data = [];
+
+function cargarDatos(){
+  fetch(API_URL)
+  .then(r=>r.json())
+  .then(d=>{
+    data = d;
+    renderFiltros();
+    renderTabla();
+  });
+}
+
+function getMulti(id){
+  return Array.from(document.getElementById(id).selectedOptions).map(o=>o.value);
+}
+
+function renderFiltros(){
+  let estados={},hosp={},tipo={},proy={};
+
+  data.forEach(d=>{
+    estados[d.ESTADO]=1;
+    hosp[d.HOSPITAL]=1;
+    tipo[d['TIPO PROYECTO']]=1;
+    proy[d['NOMBRE PROYECTO']]=1;
+  });
+
+  fillSelect('f-estado',estados);
+  fillSelect('f-hosp',hosp);
+  fillSelect('f-tipo',tipo);
+  fillSelect('f-proy',proy);
+}
+
+function fillSelect(id,obj){
+  document.getElementById(id).innerHTML =
+    Object.keys(obj).map(v=>`<option>${v}</option>`).join('');
+}
+
+function renderTabla(){
+  let q = document.getElementById('search').value.toLowerCase();
+  let fE=getMulti('f-estado'), fH=getMulti('f-hosp'), fT=getMulti('f-tipo'), fP=getMulti('f-proy');
+
+  let filtered = data.filter(d=>{
+    if(fE.length && !fE.includes(d.ESTADO)) return false;
+    if(fH.length && !fH.includes(d.HOSPITAL)) return false;
+    if(fT.length && !fT.includes(d['TIPO PROYECTO'])) return false;
+    if(fP.length && !fP.includes(d['NOMBRE PROYECTO'])) return false;
+
+    let txt = JSON.stringify(d).toLowerCase();
+    return txt.includes(q);
+  });
+
+  let html = '';
+  filtered.forEach(d=>{
+    html += `<div class="card">
+      <b>${d.EQUIPO}</b> - ${d.HOSPITAL}<br>
+      ${d.ESTADO} | ${d['NOMBRE PROYECTO']}
+    </div>`;
+  });
+
+  document.getElementById('tabla').innerHTML = html;
+}
+
+function renderLicitaciones(){
+  let map = {};
+  data.forEach(d=>{
+    let k = d.LICITACION || 'SIN LICITACION';
+    if(!map[k]) map[k]=[];
+    map[k].push(d);
+  });
+
+  let html='';
+  for(let k in map){
+    html += `<div class="card">
+      <b>${k}</b><br>
+      ${map[k].length} equipos
+    </div>`;
+  }
+
+  document.getElementById('licitaciones').innerHTML=html;
+}
+
+function renderDistribucion(){
+  let map = {};
+
+  data.forEach(d=>{
+    let key = d.EQUIPO;
+    if(!map[key]) map[key]={total:0,h:{}};
+
+    map[key].total++;
+
+    if(!map[key].h[d.HOSPITAL]) map[key].h[d.HOSPITAL]=0;
+    map[key].h[d.HOSPITAL]++;
+  });
+
+  let html='';
+
+  for(let k in map){
+    let hosp = Object.entries(map[k].h).map(([h,q])=>`${h} (${q})`).join(', ');
+
+    html += `<div class="card">
+      <b>${k}</b><br>
+      Total: ${map[k].total}<br>
+      ${hosp}
+    </div>`;
+  }
+
+  document.getElementById('distribucion').innerHTML=html;
+}
+
+function showTab(t){
+  document.getElementById('tab-equipos').style.display='none';
+  document.getElementById('tab-licitaciones').style.display='none';
+  document.getElementById('tab-distribucion').style.display='none';
+
+  document.getElementById('tab-'+t).style.display='block';
+
+  if(t==='licitaciones') renderLicitaciones();
+  if(t==='distribucion') renderDistribucion();
+}
+
+cargarDatos();
+</script>
+
+</body>
+</html>
