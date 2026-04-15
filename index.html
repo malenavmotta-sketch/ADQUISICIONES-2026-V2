@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EQUIPAMIENTO 2026 | Gestión Profesional de Adquisiciones</title>
+    <title>EQUIPAMIENTO 2026 | Sistema Integral de Adquisiciones</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -18,10 +18,6 @@
             --radius-md: 14px;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            
-            /* Colores de Estado */
-            --bs0: #94a3b8; --bs1: #8b5cf6; --bs2: #3b82f6; --bs3: #22c55e;
-            --bs4: #f59e0b; --bs5: #ef4444; --bs6: #64748b; --bs7: #b91c1c;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -45,7 +41,7 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* Sección de Login */
+        /* Login Section */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-main); z-index: 2000;
@@ -57,23 +53,18 @@
             text-align: center; border: 1px solid var(--border);
             animation: fadeIn 0.4s ease-out;
         }
-        .login-card h2 { margin-bottom: 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
-        .login-card p { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem; }
         .login-input {
             width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border);
             border-radius: var(--radius-sm); background: var(--bg-main);
             color: var(--text-main); margin-bottom: 1rem; outline: none;
-            transition: border-color 0.2s;
         }
-        .login-input:focus { border-color: var(--primary); }
         .login-btn {
             width: 100%; padding: 0.75rem; background: var(--primary);
             color: white; border: none; border-radius: var(--radius-sm);
-            font-weight: 600; cursor: pointer; transition: background 0.2s;
+            font-weight: 600; cursor: pointer;
         }
-        .login-btn:hover { background: var(--primary-hover); }
 
-        /* Estructura App */
+        /* App Layout */
         #app-container { display: none; }
         header { 
             background: var(--bg-card); border-bottom: 1px solid var(--border); 
@@ -81,10 +72,8 @@
             justify-content: space-between; position: sticky; top: 0; z-index: 900;
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         }
-        .header-brand { display: flex; align-items: center; gap: 0.75rem; }
-        .header-brand h1 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--primary); }
         
-        /* Navegación */
+        /* Navigation */
         .nav-container { border-bottom: 1px solid var(--border); background: var(--bg-card); position: sticky; top: 57px; z-index: 800; }
         .tabs { display: flex; max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; gap: 2rem; overflow-x: auto; }
         .tab { 
@@ -92,40 +81,43 @@
             color: var(--text-muted); border-bottom: 2px solid transparent; transition: 0.2s;
             white-space: nowrap;
         }
-        .tab:hover { color: var(--text-main); }
         .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; }
 
         /* Dashboard */
-        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
         .metric-card { 
-            background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md);
+            background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md);
             border: 1px solid var(--border); box-shadow: var(--shadow-sm);
         }
-        .m-label { font-size: 0.75rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
-        .m-value { font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0; letter-spacing: -0.03em; }
+        .m-label { font-size: 0.7rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+        .m-value { font-size: 1.5rem; font-weight: 700; margin: 0.25rem 0; letter-spacing: -0.03em; }
 
         .section-card { background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
         .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-main); }
 
-        /* Gráficos */
+        /* Progress Bars */
         .prog-bar-container { height: 14px; background: var(--bg-main); border-radius: 7px; overflow: hidden; display: flex; margin-bottom: 1.5rem; }
         .prog-seg { height: 100%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .legend { display: flex; flex-wrap: wrap; gap: 1rem; }
-        .l-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-muted); }
-        .l-dot { width: 10px; height: 10px; border-radius: 3px; }
+        .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .l-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--text-muted); }
+        .l-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+        /* KPI Category Display */
+        .cat-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+        .cat-kpi-item { padding: 15px; border-radius: 10px; background: var(--bg-main); text-align: center; border: 1px solid var(--border); }
+        .cat-kpi-val { font-weight: 800; font-size: 1.4rem; display: block; color: var(--primary); }
+        .cat-kpi-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; color: var(--text-muted); }
 
         /* Multi-Select */
-        .filter-group { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
         .ms-container { position: relative; min-width: 240px; }
         .ms-trigger { 
             padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm);
             background: var(--bg-card); color: var(--text-main); font-size: 0.8125rem; 
             cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: var(--shadow-sm); transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
         }
-        .ms-trigger:hover { border-color: var(--primary); }
         .ms-trigger span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
         .ms-dropdown {
             position: absolute; top: 105%; left: 0; width: 100%; max-height: 280px;
@@ -136,24 +128,22 @@
         .ms-container.open .ms-dropdown { display: block; }
         .ms-opt { padding: 0.5rem 1rem; display: flex; align-items: center; gap: 10px; font-size: 0.8125rem; cursor: pointer; }
         .ms-opt:hover { background: var(--bg-main); }
-        .ms-opt input { width: 16px; height: 16px; accent-color: var(--primary); }
 
-        /* Acordeones */
+        /* Accordions */
         .licit-item, .proy-item { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-card); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
         .licit-header, .proy-header { 
             padding: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; 
             align-items: center; transition: background 0.2s; user-select: none;
         }
-        .licit-header:hover, .proy-header:hover { background: rgba(0,0,0,0.01); }
         .licit-body, .proy-body { display: none; border-top: 1px solid var(--border); padding: 1.25rem; background: var(--bg-card); }
         .open .licit-body, .open .proy-body { display: block; animation: slideDown 0.2s ease-out; }
         
-        .arrow-icon { transition: transform 0.3s ease; color: var(--text-light); display: flex; align-items: center; justify-content: center; }
+        .arrow-icon { transition: transform 0.3s ease; color: var(--text-light); }
         .open .arrow-icon { transform: rotate(180deg); color: var(--primary); }
 
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Tablas */
+        /* Tables */
         .table-container { width: 100%; overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; min-width: 900px; }
         th { text-align: left; padding: 1rem; background: var(--bg-main); font-weight: 600; color: var(--text-muted); position: sticky; top: 0; z-index: 10; }
@@ -164,13 +154,10 @@
         .badge { padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; display: inline-block; }
         .row-group { background: rgba(37, 99, 235, 0.04) !important; font-weight: 700; color: var(--primary); }
 
-        /* Animaciones */
+        /* General Utils */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .view-content { animation: fadeIn 0.3s ease-out; }
-
         .btn-ghost { padding: 0.5rem 1rem; border: none; background: transparent; color: var(--primary); font-size: 0.8125rem; font-weight: 600; cursor: pointer; border-radius: var(--radius-sm); }
-        .btn-ghost:hover { background: rgba(37, 99, 235, 0.1); }
-        
         .sync-btn { border: 1px solid var(--border); background: var(--bg-card); padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
         .sync-dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
@@ -188,15 +175,15 @@
         <p>Introduce tu clave de acceso para gestionar el equipamiento 2026.</p>
         <input type="password" id="login-pass" class="login-input" placeholder="Contraseña (Default: 2026)" onkeydown="if(event.key==='Enter') doLogin()">
         <button class="login-btn" onclick="doLogin()">Entrar al Panel</button>
-        <div id="login-err" style="color: #ef4444; font-size: 0.75rem; margin-top: 1rem; display: none;">Contraseña incorrecta. Inténtalo de nuevo.</div>
+        <div id="login-err" style="color: #ef4444; font-size: 0.75rem; margin-top: 1rem; display: none;">Contraseña incorrecta.</div>
     </div>
 </div>
 
 <div id="app-container">
     <header>
-        <div class="header-brand">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-            <h1>EQUIPAMIENTO 2026</h1>
+            <h1 style="font-size: 1rem; font-weight: 700; color: var(--primary);">EQUIPAMIENTO 2026</h1>
         </div>
         <div style="display: flex; gap: 1.5rem; align-items: center;">
             <span id="update-timer" style="font-size: 0.7rem; color: var(--text-light)"></span>
@@ -221,18 +208,21 @@
         <!-- VISTA DASHBOARD -->
         <div id="view-dash" class="view-content">
             <div class="metric-grid" id="dash-metrics"></div>
+            
             <div class="section-card">
-                <div class="section-title">Evolución de Adquisiciones y Estados</div>
+                <div class="section-title">Evolución Institucional de Adquisiciones</div>
+                <div id="category-kpi" class="cat-kpi-grid"></div>
                 <div class="prog-bar-container" id="main-prog-bar"></div>
                 <div class="legend" id="main-prog-legend"></div>
             </div>
-            <div class="charts-grid">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                 <div class="section-card">
                     <div class="section-title">Inversión por Tipo de Proyecto</div>
                     <div id="chart-investment"></div>
                 </div>
                 <div class="section-card">
-                    <div class="section-title">Próximas Aperturas</div>
+                    <div class="section-title">Próximas Aperturas (Por Licitación)</div>
                     <div id="chart-upcoming"></div>
                 </div>
             </div>
@@ -246,8 +236,8 @@
 
         <!-- VISTA PROYECTOS -->
         <div id="view-proy" class="view-content" style="display:none">
-            <div class="filter-group">
-                <div class="filter-label" style="font-size: 0.8125rem; font-weight: 600; color: var(--text-muted)">Filtrar Proyectos:</div>
+            <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; align-items: center;">
+                <span style="font-size: 0.8rem; font-weight: 600;">Filtrar Proyectos:</span>
                 <div id="ms-proy" class="ms-container"></div>
                 <button class="btn-ghost" onclick="resetFilter('proy')">Restablecer</button>
             </div>
@@ -256,8 +246,8 @@
 
         <!-- VISTA EQUIPOS -->
         <div id="view-list" class="view-content" style="display:none">
-            <div class="filter-group">
-                <input type="text" id="search-input" placeholder="Buscar por equipo, hospital, expediente..." oninput="renderTable()" style="flex: 2; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-main); font-size: 0.8125rem;">
+            <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <input type="text" id="search-input" placeholder="Búsqueda global..." oninput="renderTable()" style="flex: 2; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.8rem;">
                 <div id="ms-status" class="ms-container"></div>
                 <div id="ms-hosp" class="ms-container"></div>
                 <button class="btn-ghost" onclick="resetFilter('list')">Limpiar Filtros</button>
@@ -265,9 +255,7 @@
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Hospital</th><th>Equipo</th><th>Cant.</th><th>Monto Total</th><th>Proyecto</th><th>Apertura</th><th>Estado</th>
-                        </tr>
+                        <tr><th>Hospital</th><th>Equipo</th><th>Cant.</th><th>Monto Total</th><th>Proyecto</th><th>Apertura</th><th>Estado</th></tr>
                     </thead>
                     <tbody id="main-table-body"></tbody>
                 </table>
@@ -280,15 +268,18 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbzD-hJkihX-7wLb4DqUfGCYtIYRWEc2VdziaJ5h0EbMnZhCZAaKx67aoCCLY-Os7jD3/exec';
     const MASTER_PASS = "2026";
 
+    // cat: false indica que el estado NO pertenece al flujo de evolución institucional
     const STATUS_UI = {
-        'SIN AVANCE': { color: '#94a3b8', bg: 'rgba(148,163,184,0.1)' },
-        'ARMADO DE PLIEGO': { color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
-        'PUBLICACION': { color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-        'EN EVALUACION': { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-        'ADJUDICADO': { color: '#22c55e', bg: 'rgba(34,197,94,0.1)' },
-        'FRACASADO': { color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
-        'DESIERTO': { color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
-        'NO SE COMPRO': { color: '#b91c1c', bg: 'rgba(185,28,28,0.1)' }
+        'ARMADO DE PLIEGO': { color: '#AED6F1', bg: 'rgba(174,214,241,0.2)', cat: 'Pre-Publicación' },
+        'PLIEGO FIRMADO':   { color: '#F7DC6F', bg: 'rgba(247,220,111,0.2)', cat: 'Pre-Publicación' },
+        'PUBLICACION':      { color: '#D2B4DE', bg: 'rgba(210,180,222,0.2)', cat: 'Proceso Activo' },
+        'EN EVALUACION':    { color: '#85C1E9', bg: 'rgba(133,193,233,0.2)', cat: 'Proceso Activo' },
+        'ADJUDICADO':       { color: '#ABEBC6', bg: 'rgba(171,235,198,0.2)', cat: 'Finalizado' },
+        'FRACASADO':        { color: '#F5B7B1', bg: 'rgba(245,183,177,0.2)', cat: 'Finalizado' },
+        'DESIERTO':         { color: '#7E5109', bg: 'rgba(126,81,9,0.2)',    cat: 'Finalizado' },
+        'NO SE COMPRO':     { color: '#922B21', bg: 'rgba(146,43,33,0.2)',   cat: false },
+        'SIN AVANCE':       { color: '#E59866', bg: 'rgba(229,152,102,0.2)', cat: false },
+        'APS':              { color: '#1A5276', bg: 'rgba(26,82,118,0.2)',   cat: false }
     };
 
     let rawData = [];
@@ -297,14 +288,12 @@
 
     function doLogin() {
         const input = document.getElementById('login-pass');
-        const err = document.getElementById('login-err');
         if (input.value === MASTER_PASS) {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('app-container').style.display = 'block';
             fetchData();
         } else {
-            err.style.display = 'block';
-            input.value = "";
+            document.getElementById('login-err').style.display = 'block';
         }
     }
 
@@ -316,9 +305,8 @@
 
     async function fetchData() {
         const dot = document.getElementById('sync-dot');
-        const label = document.getElementById('sync-label');
         dot.classList.add('loading');
-        label.textContent = "Sincronizando...";
+        document.getElementById('sync-label').textContent = "Sincronizando...";
 
         const cbName = `cb_${Date.now()}`;
         window[cbName] = (data) => {
@@ -331,10 +319,9 @@
             initMultiSelectors();
             
             dot.classList.remove('loading');
-            label.textContent = "Sincronizado";
+            document.getElementById('sync-label').textContent = "Sincronizado";
             document.getElementById('update-timer').textContent = `Sinc: ${new Date().toLocaleTimeString()}`;
             delete window[cbName];
-            if(document.body.contains(script)) document.body.removeChild(script);
         };
 
         const script = document.createElement('script');
@@ -346,7 +333,6 @@
         processedData = rawData.map(r => {
             const q = parseInt(r['Q SP']) || parseInt(r['Q SOLICIT.']) || 0;
             const monto = parseFloat(String(r['P. TOTAL']).replace(/[^0-9.-]+/g,"")) || 0;
-            
             let st = (r.ESTADO || 'SIN AVANCE').trim().toUpperCase();
             if (!STATUS_UI[st]) st = 'SIN AVANCE';
 
@@ -370,95 +356,89 @@
 
     const fmtUSD = (n) => n ? 'USD ' + n.toLocaleString('en-US', {minimumFractionDigits:2}) : '—';
     const fmtCompact = (n) => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : (n >= 1e3 ? (n/1e3).toFixed(1)+'k' : n);
-    const renderBadge = (st) => {
+    
+    function renderBadge(st) {
         const cfg = STATUS_UI[st] || STATUS_UI['SIN AVANCE'];
         return `<span class="badge" style="background:${cfg.bg}; color:${cfg.color}">${st}</span>`;
-    };
+    }
 
     function renderDashboard() {
-        const totalInversion = processedData.reduce((a, b) => a + b.montoTotal, 0);
-        const hospitalCount = new Set(processedData.map(d => d.hospital)).size;
+        const totalInv = processedData.reduce((a, b) => a + b.montoTotal, 0);
+        
+        // Métricas de Control Independientes
+        const sinAvanceCount = processedData.filter(d => d.estado === 'SIN AVANCE').length;
+        const noSeComproCount = processedData.filter(d => d.estado === 'NO SE COMPRO').length;
+        const totalEquiposCount = processedData.length;
 
-        const metricsEl = document.getElementById('dash-metrics');
-        if (metricsEl) {
-            metricsEl.innerHTML = `
-                <div class="metric-card"><div class="m-label">Inversión Planificada</div><div class="m-value" style="color:var(--primary)">${fmtUSD(totalInversion)}</div></div>
-                <div class="metric-card"><div class="m-label">Equipos Totales</div><div class="m-value">${processedData.length}</div></div>
-                <div class="metric-card"><div class="m-label">Hospitales Impactados</div><div class="m-value">${hospitalCount}</div></div>
-                <div class="metric-card"><div class="m-label">Licitaciones Activas</div><div class="m-value">${new Set(processedData.map(d=>d.licitacion)).size}</div></div>
-            `;
-        }
+        document.getElementById('dash-metrics').innerHTML = `
+            <div class="metric-card"><div class="m-label">Inversión Total</div><div class="m-value" style="color:var(--primary)">${fmtUSD(totalInv)}</div></div>
+            <div class="metric-card"><div class="m-label">Cantidad de Equipos</div><div class="m-value">${totalEquiposCount}</div></div>
+            <div class="metric-card"><div class="m-label">Sin Avance</div><div class="m-value" style="color:#E59866">${sinAvanceCount}</div></div>
+            <div class="metric-card"><div class="m-label">No se Compró</div><div class="m-value" style="color:#922B21">${noSeComproCount}</div></div>
+        `;
 
-        const counts = {};
-        Object.keys(STATUS_UI).forEach(k => counts[k] = 0);
-        processedData.forEach(d => counts[d.estado] = (counts[d.estado] || 0) + 1);
+        // Lógica de Evolución Institucional
+        const catCounts = { 'Pre-Publicación': 0, 'Proceso Activo': 0, 'Finalizado': 0 };
+        const detailedCounts = {};
+        Object.keys(STATUS_UI).forEach(k => detailedCounts[k] = 0);
+        
+        let totalEvolution = 0;
+        processedData.forEach(d => {
+            const cfg = STATUS_UI[d.estado];
+            detailedCounts[d.estado]++;
+            if(cfg.cat) {
+                catCounts[cfg.cat]++;
+                totalEvolution++;
+            }
+        });
 
+        // Render KPI por Categoría
+        document.getElementById('category-kpi').innerHTML = Object.entries(catCounts).map(([cat, c]) => `
+            <div class="cat-kpi-item">
+                <span class="cat-kpi-val">${c}</span>
+                <span class="cat-kpi-label">${cat}</span>
+            </div>
+        `).join('');
+
+        // Barra de Evolución
         let barHtml = '', legendHtml = '';
-        Object.entries(counts).forEach(([st, c]) => {
-            if (c === 0) return;
-            const pct = (c / processedData.length * 100);
-            const cfg = STATUS_UI[st] || STATUS_UI['SIN AVANCE'];
+        Object.entries(detailedCounts).forEach(([st, c]) => {
+            const cfg = STATUS_UI[st];
+            if (c === 0 || !cfg.cat) return;
+            const pct = (c / totalEvolution * 100);
             barHtml += `<div class="prog-seg" style="width:${pct}%; background:${cfg.color}" title="${st}: ${c}"></div>`;
             legendHtml += `<div class="l-item"><div class="l-dot" style="background:${cfg.color}"></div><span>${st} (${c})</span></div>`;
         });
-        
-        const progBarEl = document.getElementById('main-prog-bar');
-        const legendEl = document.getElementById('main-prog-legend');
-        if (progBarEl) progBarEl.innerHTML = barHtml;
-        if (legendEl) legendEl.innerHTML = legendHtml;
+        document.getElementById('main-prog-bar').innerHTML = barHtml || '<div style="color:var(--text-light); font-size:0.8rem">Sin procesos en evolución activa</div>';
+        document.getElementById('main-prog-legend').innerHTML = legendHtml;
 
+        // Inversión por Tipo
         const invData = {};
         processedData.forEach(d => invData[d.tipoProyecto] = (invData[d.tipoProyecto] || 0) + d.montoTotal);
-        const sortedInv = Object.entries(invData).sort((a,b)=>b[1]-a[1]);
-        const maxInv = sortedInv[0]?.[1] || 1;
-
-        const chartInvEl = document.getElementById('chart-investment');
-        if (chartInvEl) {
-            chartInvEl.innerHTML = sortedInv.map(([t, m]) => `
-                <div style="margin-bottom:12px">
-                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px">
-                        <span style="font-weight:600">${t}</span><span>${fmtCompact(m)}</span>
-                    </div>
-                    <div style="height:8px; background:var(--bg-main); border-radius:4px; overflow:hidden">
-                        <div style="width:${m/maxInv*100}%; height:100%; background:var(--primary)"></div>
-                    </div>
+        document.getElementById('chart-investment').innerHTML = Object.entries(invData).sort((a,b)=>b[1]-a[1]).map(([t, m]) => `
+            <div style="margin-bottom:12px">
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px">
+                    <span style="font-weight:600">${t}</span><span>${fmtCompact(m)}</span>
                 </div>
-            `).join('');
-        }
+                <div style="height:8px; background:var(--bg-main); border-radius:4px; overflow:hidden">
+                    <div style="width:${(m/totalInv*100) || 0}%; height:100%; background:var(--primary)"></div>
+                </div>
+            </div>
+        `).join('');
 
-        // --- Agrupación de Aperturas por LICITACIÓN ---
+        // Próximas Aperturas
         const aperturaMap = {};
         processedData.filter(d => d.apertura).forEach(d => {
-            if(!aperturaMap[d.licitacion]) {
-                aperturaMap[d.licitacion] = { 
-                    date: d.apertura, 
-                    exp: d.expediente, 
-                    count: 0,
-                    status: d.estado
-                };
-            }
+            if(!aperturaMap[d.licitacion]) aperturaMap[d.licitacion] = { date: d.apertura, exp: d.expediente, count: 0, status: d.estado };
             aperturaMap[d.licitacion].count++;
         });
-
-        const sortedAperturas = Object.entries(aperturaMap)
-            .sort((a,b) => new Date(a[1].date) - new Date(b[1].date))
-            .slice(0, 5);
-
-        const chartUpEl = document.getElementById('chart-upcoming');
-        if (chartUpEl) {
-            chartUpEl.innerHTML = sortedAperturas.map(([licit, data]) => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border)">
-                    <div style="font-size:0.8125rem">
-                        <b style="color:var(--primary)">${licit}</b><br>
-                        <span style="color:var(--text-muted); font-size:0.75rem">Exp: ${data.exp} &middot; ${data.count} equipos</span>
-                    </div>
-                    <div style="text-align:right; font-size:0.75rem">
-                        <b>${data.date.split('-').reverse().join('/')}</b><br>
-                        ${renderBadge(data.status)}
-                    </div>
-                </div>
-            `).join('');
-        }
+        const sortedAperturas = Object.entries(aperturaMap).sort((a,b) => new Date(a[1].date) - new Date(b[1].date)).slice(0, 5);
+        document.getElementById('chart-upcoming').innerHTML = sortedAperturas.length ? sortedAperturas.map(([licit, data]) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border)">
+                <div style="font-size:0.8rem"><b style="color:var(--primary)">${licit}</b><br><span style="color:var(--text-muted); font-size:0.7rem">Exp: ${data.exp} &middot; ${data.count} eq.</span></div>
+                <div style="text-align:right; font-size:0.7rem"><b>${data.date.split('-').reverse().join('/')}</b><br>${renderBadge(data.status)}</div>
+            </div>
+        `).join('') : '<div style="text-align:center; padding:2rem; color:var(--text-light); font-size:0.8rem">No hay aperturas programadas</div>';
     }
 
     function renderLicitaciones() {
@@ -469,114 +449,73 @@
             groups[d.licitacion].items.push(d);
         });
 
-        const sorted = Object.entries(groups).sort((a,b) => b[1].monto - a[1].monto);
-        const licitSummaryEl = document.getElementById('licit-summary');
-        if (licitSummaryEl) {
-            licitSummaryEl.innerHTML = `
-                <div class="metric-card"><div class="m-label">Inversión en Licitación</div><div class="m-value" style="color:var(--primary)">${fmtUSD(Object.values(groups).reduce((a,b)=>a+b.monto,0))}</div></div>
-                <div class="metric-card"><div class="m-label">Promedio por Proceso</div><div class="m-value">${fmtUSD(sorted.length ? Object.values(groups).reduce((a,b)=>a+b.monto,0)/sorted.length : 0)}</div></div>
-            `;
-        }
+        document.getElementById('licit-summary').innerHTML = `
+            <div class="metric-card"><div class="m-label">Inversión en Licitación</div><div class="m-value" style="color:var(--primary)">${fmtUSD(Object.values(groups).reduce((a,b)=>a+b.monto,0))}</div></div>
+            <div class="metric-card"><div class="m-label">Procesos Totales</div><div class="m-value">${Object.keys(groups).length}</div></div>
+        `;
 
-        const licitListEl = document.getElementById('licit-list');
-        if (licitListEl) {
-            licitListEl.innerHTML = sorted.map(([name, data]) => {
-                const renglones = {};
-                data.items.forEach(it => {
-                    const key = `${it.renglon}-${it.equipo}`;
-                    if(!renglones[key]) renglones[key] = { reng: it.renglonTxt, equipo: it.equipo, q: 0, m: 0, hosps: [] };
-                    renglones[key].q += it.cantidad;
-                    renglones[key].m += it.montoTotal;
-                    renglones[key].hosps.push(it);
-                });
-                const sortedReng = Object.values(renglones).sort((a,b) => parseInt(a.reng)-parseInt(b.reng));
-
-                return `
-                    <div class="licit-item">
-                        <div class="licit-header" onclick="this.parentElement.classList.toggle('open')">
-                            <div>
-                                <div style="font-weight:700; color:var(--primary); font-size:0.95rem;">${name}</div>
-                                <div style="font-size:0.75rem; color:var(--text-light); margin-top:2px;">Exp: ${data.items[0].expediente}</div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:20px;">
-                                <div style="text-align:right">
-                                    <div style="font-weight:700; font-size:0.9rem;">${fmtUSD(data.monto)}</div>
-                                    <div style="font-size:0.7rem; color:var(--text-light)">${data.items.length} equipos</div>
-                                </div>
-                                <div class="arrow-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="licit-body">
-                            <div class="table-container">
-                                <table>
-                                    <thead><tr><th width="70">Renglón</th><th>Equipo</th><th>Tipo</th><th>Hospital</th><th style="text-align:center">Cantidad</th><th style="text-align:right">Monto</th></tr></thead>
-                                    <tbody>
-                                        ${sortedReng.map(r => `
-                                            <tr class="row-group">
-                                                <td>R${r.reng}</td><td>${r.equipo}</td><td>-</td><td>(Consolidado)</td><td style="text-align:center">${r.q}</td><td style="text-align:right">${fmtUSD(r.m)}</td>
-                                            </tr>
-                                            ${r.hosps.map(h => `
-                                                <tr>
-                                                    <td></td>
-                                                    <td style="color:var(--text-muted)">${h.equipo}</td>
-                                                    <td style="color:var(--text-muted)">${h.tipoEquipo}</td>
-                                                    <td style="color:var(--text-muted)">• ${h.hospital}</td>
-                                                    <td style="text-align:center">${h.cantidad}</td>
-                                                    <td style="text-align:right">${fmtUSD(h.montoTotal)}</td>
-                                                </tr>
-                                            `).join('')}
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-    }
-
-    function renderProyectos() {
-        const groups = {};
-        processedData.forEach(d => {
-            if (activeFilters.proy.length > 0 && !activeFilters.proy.includes(d.proyecto)) return;
-            if (!groups[d.proyecto]) groups[d.proyecto] = { monto: 0, items: [] };
-            groups[d.proyecto].monto += d.montoTotal;
-            groups[d.proyecto].items.push(d);
-        });
-
-        const proyListEl = document.getElementById('proy-list');
-        if (proyListEl) {
-            proyListEl.innerHTML = Object.entries(groups).sort((a,b)=>b[1].monto - a[1].monto).map(([name, data]) => `
-                <div class="proy-item">
-                    <div class="proy-header" onclick="this.parentElement.classList.toggle('open')">
-                        <div>
-                            <div style="font-weight:700; color:var(--text-main);">${name}</div>
-                            <div style="font-size:0.75rem; color:var(--text-light); margin-top:2px;">${new Set(data.items.map(i=>i.hospital)).size} hospitales</div>
-                        </div>
+        document.getElementById('licit-list').innerHTML = Object.entries(groups).sort((a,b) => b[1].monto - a[1].monto).map(([name, data]) => {
+            const renglones = {};
+            data.items.forEach(it => {
+                const key = `${it.renglon}-${it.equipo}`;
+                if(!renglones[key]) renglones[key] = { reng: it.renglonTxt, equipo: it.equipo, q: 0, m: 0, hosps: [] };
+                renglones[key].q += it.cantidad;
+                renglones[key].m += it.montoTotal;
+                renglones[key].hosps.push(it);
+            });
+            return `
+                <div class="licit-item">
+                    <div class="licit-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div><div style="font-weight:700; color:var(--primary);">${name}</div><div style="font-size:0.75rem; color:var(--text-light)">Exp: ${data.items[0].expediente}</div></div>
                         <div style="display:flex; align-items:center; gap:20px;">
-                            <div style="text-align:right">
-                                <div style="font-weight:700; color:var(--primary); font-size:0.9rem;">${fmtUSD(data.monto)}</div>
-                                <div style="font-size:0.7rem; color:var(--text-muted)">${data.items.length} ítems</div>
-                            </div>
-                            <div class="arrow-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </div>
+                            <div style="text-align:right"><b>${fmtUSD(data.monto)}</b><div style="font-size:0.7rem;">${data.items.length} ítems</div></div>
+                            <span class="arrow-icon">▼</span>
                         </div>
                     </div>
-                    <div class="proy-body">
+                    <div class="licit-body">
                         <div class="table-container">
                             <table>
-                                <thead><tr><th>Hospital</th><th>Equipo</th><th>Cant.</th><th style="text-align:right">Monto</th><th>Estado</th></tr></thead>
-                                <tbody>${data.items.map(it => `<tr><td>${it.hospital}</td><td>${it.equipo}</td><td style="text-align:center">${it.cantidad}</td><td style="text-align:right">${fmtUSD(it.montoTotal)}</td><td>${renderBadge(it.estado)}</td></tr>`).join('')}</tbody>
+                                <thead><tr><th>Renglón</th><th>Equipo</th><th>Tipo</th><th>Hospital Destino</th><th>Cant.</th><th style="text-align:right">Monto</th></tr></thead>
+                                <tbody>
+                                    ${Object.values(renglones).sort((a,b)=>parseInt(a.reng)-parseInt(b.reng)).map(r => `
+                                        <tr class="row-group"><td>R${r.reng}</td><td>${r.equipo}</td><td>-</td><td>(Consolidado)</td><td>${r.q}</td><td style="text-align:right">${fmtUSD(r.m)}</td></tr>
+                                        ${r.hosps.map(h => `<tr><td></td><td style="color:var(--text-muted)">${h.equipo}</td><td>${h.tipoEquipo}</td><td>• ${h.hospital}</td><td>${h.cantidad}</td><td style="text-align:right">${fmtUSD(h.montoTotal)}</td></tr>`).join('')}
+                                    `).join('')}
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
+            `;
+        }).join('');
+    }
+
+    function renderProyectos() {
+        const groups = {};
+        processedData.filter(d => activeFilters.proy.length === 0 || activeFilters.proy.includes(d.proyecto)).forEach(d => {
+            if (!groups[d.proyecto]) groups[d.proyecto] = { monto: 0, items: [] };
+            groups[d.proyecto].monto += d.montoTotal;
+            groups[d.proyecto].items.push(d);
+        });
+        document.getElementById('proy-list').innerHTML = Object.entries(groups).sort((a,b)=>b[1].monto - a[1].monto).map(([name, data]) => `
+            <div class="proy-item">
+                <div class="proy-header" onclick="this.parentElement.classList.toggle('open')">
+                    <div><b>${name}</b><div style="font-size:0.75rem; color:var(--text-light)">${new Set(data.items.map(i=>i.hospital)).size} hospitales asignados</div></div>
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <div style="text-align:right"><b style="color:var(--primary)">${fmtUSD(data.monto)}</b></div>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                </div>
+                <div class="proy-body">
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Hospital</th><th>Equipo</th><th>Cant.</th><th style="text-align:right">Monto</th><th>Estado</th></tr></thead>
+                            <tbody>${data.items.map(it => `<tr><td>${it.hospital}</td><td>${it.equipo}</td><td>${it.cantidad}</td><td style="text-align:right">${fmtUSD(it.montoTotal)}</td><td>${renderBadge(it.estado)}</td></tr>`).join('')}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `).join('');
     }
 
     function renderTable() {
@@ -587,87 +526,56 @@
             const matchesHosp = activeFilters.hosp.length === 0 || activeFilters.hosp.includes(d.hospital);
             return matchesSearch && matchesStatus && matchesHosp;
         });
-
-        const tableBodyEl = document.getElementById('main-table-body');
-        if (tableBodyEl) {
-            tableBodyEl.innerHTML = filtered.map(d => `
-                <tr>
-                    <td style="font-weight:600">${d.hospital}</td>
-                    <td>${d.equipo}</td>
-                    <td style="text-align:center">${d.cantidad}</td>
-                    <td>${fmtUSD(d.montoTotal)}</td>
-                    <td style="color:var(--text-muted); font-size:0.75rem">${d.proyecto}</td>
-                    <td>${d.apertura ? d.apertura.split('-').reverse().join('/') : '—'}</td>
-                    <td>${renderBadge(d.estado)}</td>
-                </tr>
-            `).join('');
-        }
+        document.getElementById('main-table-body').innerHTML = filtered.map(d => `
+            <tr>
+                <td style="font-weight:600">${d.hospital}</td><td>${d.equipo}</td><td style="text-align:center">${d.cantidad}</td><td>${fmtUSD(d.montoTotal)}</td>
+                <td style="color:var(--text-muted); font-size:0.75rem">${d.proyecto}</td><td>${d.apertura ? d.apertura.split('-').reverse().join('/') : '—'}</td><td>${renderBadge(d.estado)}</td>
+            </tr>
+        `).join('');
     }
 
     function initMultiSelectors() {
         const proys = [...new Set(processedData.map(d => d.proyecto))].sort();
         const hosps = [...new Set(processedData.map(d => d.hospital))].sort();
         const stats = Object.keys(STATUS_UI);
-
-        buildSelector('ms-proy', 'Filtrar Proyectos', proys, 'proy', renderProyectos);
+        buildSelector('ms-proy', 'Seleccionar Proyectos', proys, 'proy', renderProyectos);
         buildSelector('ms-status', 'Filtrar Estados', stats, 'status', renderTable);
         buildSelector('ms-hosp', 'Filtrar Hospitales', hosps, 'hosp', renderTable);
     }
 
     function buildSelector(id, label, options, key, callback) {
         const container = document.getElementById(id);
-        if (!container) return;
-        
         const current = activeFilters[key];
         let text = label;
-        if (current.length > 0) {
-            text = current.length <= 2 ? current.join(', ') : `${current[0]}, ${current[1]} +${current.length - 2}`;
-        }
-
+        if (current.length > 0) text = current.length <= 2 ? current.join(', ') : `${current[0]}, ${current[1]} +${current.length - 2}`;
         container.innerHTML = `
             <div class="ms-trigger" onclick="document.querySelectorAll('.ms-container').forEach(c=>c.id!=='${id}'&&c.classList.remove('open')); this.parentElement.classList.toggle('open')">
                 <span title="${current.join(', ')}">${text}</span><span>▼</span>
             </div>
             <div class="ms-dropdown">
-                ${options.map(opt => `
-                    <label class="ms-opt">
-                        <input type="checkbox" ${current.includes(opt) ? 'checked' : ''} 
-                               onchange="toggleVal('${key}', '${opt}', ${callback.name})">
-                        <span>${opt}</span>
-                    </label>
-                `).join('')}
+                ${options.map(opt => `<label class="ms-opt"><input type="checkbox" ${current.includes(opt) ? 'checked' : ''} onchange="toggleVal('${key}', '${opt}', ${callback.name})"><span>${opt}</span></label>`).join('')}
             </div>
         `;
     }
 
     function toggleVal(key, val, cb) {
         const i = activeFilters[key].indexOf(val);
-        if (i > -1) activeFilters[key].splice(i, 1);
-        else activeFilters[key].push(val);
-        cb();
-        initMultiSelectors();
+        if (i > -1) activeFilters[key].splice(i, 1); else activeFilters[key].push(val);
+        cb(); initMultiSelectors();
     }
 
     function resetFilter(type) {
-        if (type === 'proy') { activeFilters.proy = []; renderProyectos(); }
-        else { activeFilters.status = []; activeFilters.hosp = []; renderTable(); }
+        if (type === 'proy') activeFilters.proy = []; else { activeFilters.status = []; activeFilters.hosp = []; renderTable(); }
         initMultiSelectors();
     }
 
     function switchTab(view, btn) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
-        ['dash', 'licit', 'proy', 'list'].forEach(v => {
-            const el = document.getElementById(`view-${v}`);
-            if (el) el.style.display = (v === view) ? 'block' : 'none';
-        });
+        ['dash', 'licit', 'proy', 'list'].forEach(v => document.getElementById(`view-${v}`).style.display = (v === view) ? 'block' : 'none');
     }
 
-    window.onclick = (e) => { 
-        if (!e.target.closest('.ms-container')) {
-            document.querySelectorAll('.ms-container').forEach(c => c.classList.remove('open')); 
-        }
-    };
+    window.onclick = (e) => { if (!e.target.closest('.ms-container')) document.querySelectorAll('.ms-container').forEach(c => c.classList.remove('open')); };
 </script>
 </body>
 </html>
