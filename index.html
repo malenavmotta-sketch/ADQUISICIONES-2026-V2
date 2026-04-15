@@ -62,7 +62,7 @@
         .bar-val { font-size: 11px; width: 45px; text-align: right; }
 
         /* Multi-Select Custom Component */
-        .multi-select-container { position: relative; display: inline-block; min-width: 200px; }
+        .multi-select-container { position: relative; display: inline-block; min-width: 220px; max-width: 300px; }
         .multi-select-trigger { 
             padding: 8px 12px; 
             border: 1px solid var(--border); 
@@ -75,6 +75,13 @@
             justify-content: space-between; 
             align-items: center;
             user-select: none;
+            overflow: hidden;
+        }
+        .multi-select-trigger span:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 8px;
         }
         .multi-select-dropdown {
             position: absolute;
@@ -178,7 +185,7 @@
     <!-- PROYECTOS -->
     <div id="view-proy" style="display:none">
         <div class="filters">
-            <span class="filter-label">Filtrar Proyectos:</span>
+            <span class="filter-label">Proyectos:</span>
             <div id="multi-proy" class="multi-select-container"></div>
             <button class="sync-btn" onclick="resetMultiFilter('proy')" style="padding: 6px 10px;">Limpiar</button>
         </div>
@@ -262,12 +269,19 @@
         if (!container) return;
         const selected = selectedFilters[targetKey];
         
-        let triggerText = selected.length === 0 ? label : `${selected.length} seleccionados`;
-        if (selected.length === 1) triggerText = selected[0].substring(0, 15) + (selected[0].length > 15 ? '...' : '');
+        let triggerText = label;
+        if (selected.length > 0) {
+            // Lógica para mostrar los nombres seleccionados
+            if (selected.length <= 2) {
+                triggerText = selected.join(', ');
+            } else {
+                triggerText = `${selected[0]}, ${selected[1]} +${selected.length - 2}`;
+            }
+        }
 
         container.innerHTML = `
             <div class="multi-select-trigger" onclick="this.parentElement.classList.toggle('open')">
-                <span>${triggerText}</span>
+                <span title="${selected.join(', ')}">${triggerText}</span>
                 <span>▼</span>
             </div>
             <div class="multi-select-dropdown">
@@ -382,7 +396,7 @@
         Object.entries(counts).forEach(([st, c]) => {
             if (c === 0) return;
             const pct = (c / processedData.length * 100);
-            const cfg = STATUS_CFG[st] || STATUS_CFG['SIN AVANCE']; // Fallback fix
+            const cfg = STATUS_CFG[st] || STATUS_CFG['SIN AVANCE'];
             barHtml += `<div class="prog-seg" style="width:${pct}%; background:${cfg.color}"></div>`;
             legendHtml += `<div class="legend-item"><div class="dot" style="background:${cfg.color}"></div><span>${st} (${c})</span></div>`;
         });
