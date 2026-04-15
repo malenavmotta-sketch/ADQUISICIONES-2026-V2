@@ -1,204 +1,750 @@
-<!-- VERSION MEJORADA CON:
-- Filtros múltiples
-- Filtro por proyecto
-- Tab Licitaciones
-- Tab Distribución
-- Mejoras visuales
--->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adquisiciones 2026 PRO</title>
-
+<title>Adquisiciones 2026</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui;background:#f5f5f3;color:#1a1a1a}
-:root{--bg1:#fff;--bg2:#f1efe8;--t1:#1a1a1a;--t2:#5f5e5a;--b1:rgba(0,0,0,0.1)}
-
-header{padding:1rem 1.5rem;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between}
-.container{padding:1.5rem;max-width:1300px;margin:auto}
-
-.tabs{display:flex;gap:6px;margin-bottom:1rem}
-.tab{padding:8px 14px;border:none;cursor:pointer;background:none}
-.tab.active{border-bottom:2px solid black}
-
-.card{background:#fff;border:1px solid var(--b1);border-radius:10px;padding:1rem;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,0.05);transition:.2s}
-.card:hover{transform:translateY(-2px)}
-
-.filters{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.filters select,.filters input{padding:6px;border-radius:6px;border:1px solid #ccc}
-
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
+:root{--bg1:#ffffff;--bg2:#f1efe8;--t1:#1a1a1a;--t2:#5f5e5a;--t3:#888780;--b1:rgba(0,0,0,0.12);--b2:rgba(0,0,0,0.25);--r1:8px;--r2:12px}
+@media(prefers-color-scheme:dark){
+  :root{--bg1:#1e1e1c;--bg2:#2a2a28;--t1:#f0ede6;--t2:#b4b2a9;--t3:#888780;--b1:rgba(255,255,255,0.12);--b2:rgba(255,255,255,0.25)}
+  body{background:#141412;color:#f0ede6}
+  .bs0{background:#2C2C2A;color:#D3D1C7}.bs1{background:#26215C;color:#CECBF6}
+  .bs2{background:#042C53;color:#B5D4F4}.bs3{background:#173404;color:#C0DD97}
+  .bs4{background:#412402;color:#FAC775}.bs5{background:#501313;color:#F7C1C1}
+  .bs6{background:#2C2C2A;color:#D3D1C7}.bs7{background:#501313;color:#F7C1C1}
+  .dias-rojo{background:#501313;color:#F7C1C1}.dias-naranja{background:#412402;color:#FAC775}
+  .dias-verde{background:#173404;color:#C0DD97}.dias-gris{background:#2C2C2A;color:#D3D1C7}
+  .tag-si{background:#173404;color:#C0DD97}.tag-no{background:#2C2C2A;color:#B4B2A9}
+}
+header{background:var(--bg1);border-bottom:0.5px solid var(--b1);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.header-left{display:flex;align-items:baseline;gap:12px}
+header h1{font-size:17px;font-weight:500}
+.sync-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--b2);border-radius:var(--r1);background:var(--bg1);color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:6px}
+.sync-btn:hover{background:var(--bg2)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#639922;flex-shrink:0}
+.sync-dot.loading{background:#EF9F27;animation:pulse 1s infinite}
+.sync-dot.error{background:#E24B4A}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.container{max-width:1300px;margin:0 auto;padding:1.5rem}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--b1)}
+.tab{padding:8px 16px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.tab.active{color:var(--t1);border-bottom:2px solid var(--t1);font-weight:500}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1.5rem}
+.metric{background:var(--bg2);border-radius:var(--r1);padding:1rem}
+.metric-label{font-size:12px;color:var(--t2);margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:500}
+.metric-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem}
+.card{background:var(--bg1);border:0.5px solid var(--b1);border-radius:var(--r2);padding:1rem 1.25rem}
+.card-full{background:var(--bg1);border:0.5px solid var(--b1);border-radius:var(--r2);padding:1rem 1.25rem;margin-bottom:1.5rem}
+.card-title{font-size:13px;font-weight:500;color:var(--t2);margin-bottom:12px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bar-label{font-size:12px;color:var(--t2);width:130px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:14px;background:var(--bg2);border-radius:7px;overflow:hidden}
+.bar-fill{height:100%;border-radius:7px}
+.bar-count{font-size:12px;color:var(--t2);width:28px;text-align:right;flex-shrink:0}
+.prog-single{margin-bottom:10px}
+.prog-header{display:flex;justify-content:space-between;margin-bottom:4px}
+.prog-name{font-size:12px;color:var(--t2);font-weight:500}
+.prog-pct{font-size:12px;color:var(--t3)}
+.prog-track{height:10px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.prog-fill{height:100%;border-radius:5px}
+.prog-gen-track{height:18px;background:var(--bg2);border-radius:9px;overflow:hidden;display:flex;margin-bottom:6px}
+.prog-seg{height:100%}
+.prog-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.prog-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+.prog-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.urg-table{width:100%;border-collapse:collapse;font-size:13px}
+.urg-table th{text-align:left;padding:7px 10px;color:var(--t2);font-weight:500;border-bottom:0.5px solid var(--b1);font-size:12px}
+.urg-table td{padding:7px 10px;border-bottom:0.5px solid var(--b1);vertical-align:middle}
+.urg-table tr:last-child td{border-bottom:none}
+.dias-chip{display:inline-block;font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.dias-rojo{background:#FCEBEB;color:#A32D2D}.dias-naranja{background:#FAEEDA;color:#633806}
+.dias-verde{background:#EAF3DE;color:#27500A}.dias-gris{background:#F1EFE8;color:#444441}
+.proy-card{background:var(--bg1);border:0.5px solid var(--b1);border-radius:var(--r2);margin-bottom:10px;overflow:hidden}
+.proy-header{padding:.85rem 1.25rem;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.proy-header:hover{background:var(--bg2)}
+.proy-name{font-size:14px;font-weight:500}
+.proy-meta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.proy-count{font-size:12px;color:var(--t2);background:var(--bg2);padding:2px 8px;border-radius:20px}
+.proy-monto{font-size:13px;font-weight:500}
+.proy-arrow{font-size:13px;color:var(--t3);transition:transform .2s}
+.proy-arrow.open{transform:rotate(90deg)}
+.proy-body{display:none;border-top:0.5px solid var(--b1);overflow-x:auto}
+.proy-body.open{display:block}
+.proy-table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+.proy-table th{padding:6px 10px;font-size:11px;color:var(--t2);font-weight:500;background:var(--bg2);text-align:left;border-bottom:0.5px solid var(--b1)}
+.proy-table td{padding:6px 10px;border-bottom:0.5px solid var(--b1)}
+.proy-table tr:last-child td{border-bottom:none}
+.proy-table tr:hover td{background:var(--bg2)}
+/* ── Distribución ── */
+.dist-card{background:var(--bg1);border:0.5px solid var(--b1);border-radius:var(--r2);margin-bottom:10px;overflow:hidden}
+.dist-header{padding:.85rem 1.25rem;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dist-header:hover{background:var(--bg2)}
+.dist-body{display:none;border-top:0.5px solid var(--b1)}
+.dist-body.open{display:block}
+.dist-renglon{border-bottom:0.5px solid var(--b1)}
+.dist-renglon:last-child{border-bottom:none}
+.dist-renglon-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.25rem;gap:8px;cursor:pointer}
+.dist-renglon-header:hover{background:var(--bg2)}
+.dist-renglon-body{display:none;padding:0 1.25rem .75rem}
+.dist-renglon-body.open{display:block}
+.dist-hosp-table{width:100%;border-collapse:collapse;font-size:12px}
+.dist-hosp-table th{padding:5px 8px;font-size:11px;color:var(--t2);font-weight:500;background:var(--bg2);text-align:left;border-bottom:0.5px solid var(--b1)}
+.dist-hosp-table td{padding:5px 8px;border-bottom:0.5px solid var(--b1)}
+.dist-hosp-table tr:last-child td{border-bottom:none}
+.dist-hosp-table tr:hover td{background:var(--bg2)}
+.dist-renglon-name{font-size:13px;font-weight:500}
+.dist-renglon-sub{font-size:11px;color:var(--t3);margin-top:1px}
+.dist-renglon-stats{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.dist-renglon-q{font-size:12px;color:var(--t2);background:var(--bg2);padding:2px 8px;border-radius:20px}
+.dist-renglon-monto{font-size:12px;font-weight:500;white-space:nowrap}
+.dist-renglon-arrow{font-size:11px;color:var(--t3);transition:transform .2s}
+.dist-renglon-arrow.open{transform:rotate(90deg)}
+/* ─────────────────── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.section-title{font-size:15px;font-weight:500}
+.filters{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.filters input,.filters select{font-size:13px;padding:6px 10px;border:0.5px solid var(--b2);border-radius:var(--r1);background:var(--bg1);color:var(--t1)}
+.filters input{flex:1;min-width:180px}
+.total-bar{background:var(--bg2);border-radius:var(--r1);padding:.6rem 1rem;margin-bottom:12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.total-label{font-size:12px;color:var(--t2)}
+.total-value{font-size:18px;font-weight:500}
+.total-sub{font-size:12px;color:var(--t3)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
+.bs0{background:#F1EFE8;color:#444441}
+.bs1{background:#EEEDFE;color:#3C3489}
+.bs2{background:#E6F1FB;color:#0C447C}
+.bs3{background:#EAF3DE;color:#27500A}
+.bs4{background:#FAEEDA;color:#633806}
+.bs5{background:#FCEBEB;color:#791F1F}
+.bs6{background:#F1EFE8;color:#5F5E5A}
+.bs7{background:#FCEBEB;color:#A32D2D}
+.table-wrap{overflow-x:auto}
+table.main{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px}
+table.main th{text-align:left;padding:8px 10px;color:var(--t2);font-weight:500;border-bottom:0.5px solid var(--b1);white-space:nowrap;background:var(--bg1);position:sticky;top:0;z-index:1}
+table.main td{padding:7px 10px;border-bottom:0.5px solid var(--b1);vertical-align:middle}
+table.main tr:last-child td{border-bottom:none}
+table.main tr:hover td{background:var(--bg2)}
+.chip{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--bg2);color:var(--t2)}
+.tag-cheq{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px}
+.tag-si{background:#EAF3DE;color:#27500A}.tag-no{background:#F1EFE8;color:#5F5E5A}
+.empty{text-align:center;padding:3rem;color:var(--t3);font-size:14px}
+.loading-screen{text-align:center;padding:4rem;color:var(--t3)}
+@media(max-width:700px){.charts-grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-
 <body>
 <header>
-  <h2>Adquisiciones 2026 PRO</h2>
-  <button onclick="cargarDatos()">Actualizar</button>
-</header>
-
-<div class="container">
-
-<div class="tabs">
-  <button class="tab active" onclick="showTab('equipos')">Equipos</button>
-  <button class="tab" onclick="showTab('licitaciones')">Licitaciones</button>
-  <button class="tab" onclick="showTab('distribucion')">Distribución</button>
-</div>
-
-<!-- TAB EQUIPOS -->
-<div id="tab-equipos">
-  <div class="filters">
-    <input id="search" placeholder="Buscar..." oninput="renderTabla()">
-
-    <select id="f-estado" multiple onchange="renderTabla()"></select>
-    <select id="f-hosp" multiple onchange="renderTabla()"></select>
-    <select id="f-tipo" multiple onchange="renderTabla()"></select>
-    <select id="f-proy" multiple onchange="renderTabla()"></select>
+  <div class="header-left">
+    <h1>Adquisiciones 2026</h1>
+    <span id="header-count" style="font-size:13px;color:var(--t3)"></span>
   </div>
+  <button class="sync-btn" onclick="cargarDatos(true)">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Actualizar</span>
+  </button>
+</header>
+<div class="container">
+  <div id="loading-screen" class="loading-screen">
+    <div class="sync-dot loading" style="width:12px;height:12px;margin:0 auto 8px"></div>
+    <p>Cargando datos desde Google Sheets...</p>
+  </div>
+  <div id="app" style="display:none">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+      <button class="tab" onclick="showTab('proyectos')">Por proyecto</button>
+      <button class="tab" onclick="showTab('distribucion')">Distribución</button>
+      <button class="tab" onclick="showTab('equipos')">Equipos</button>
+    </div>
+    <div id="tab-dashboard">
+      <div class="metric-grid" id="metrics"></div>
+      <div class="card-full">
+        <div class="card-title">Progreso general del plan 2026</div>
+        <div class="prog-gen-track" id="prog-gen"></div>
+        <div class="prog-legend" id="prog-legend"></div>
+      </div>
+      <div class="card-full">
+        <div class="card-title">Avance por estado</div>
+        <div id="prog-estados"></div>
+      </div>
+      <div class="charts-grid">
+        <div class="card"><div class="card-title">Por hospital (top 10)</div><div id="ch-hosp"></div></div>
+        <div class="card"><div class="card-title">Por tipo de proyecto</div><div id="ch-tipo"></div></div>
+      </div>
+      <div class="card-full">
+        <div class="card-title">Proximas aperturas</div>
+        <div id="ch-apertura"></div>
+      </div>
+    </div>
+    <div id="tab-proyectos" style="display:none">
+      <div class="section-header">
+        <div class="section-title">Agrupado por proyecto</div>
+        <div id="proy-total" style="font-size:13px;color:var(--t2)"></div>
+      </div>
+      <div id="proy-container"></div>
+    </div>
 
-  <div id="tabla"></div>
+    <!-- ══════════════ TAB DISTRIBUCIÓN ══════════════ -->
+    <div id="tab-distribucion" style="display:none">
+      <div class="section-header">
+        <div class="section-title">Distribución por licitación</div>
+        <div id="dist-total" style="font-size:13px;color:var(--t2)"></div>
+      </div>
+      <div class="total-bar" id="dist-summary-bar"></div>
+      <div id="dist-container"></div>
+    </div>
+    <!-- ════════════════════════════════════════════════ -->
+
+    <div id="tab-equipos" style="display:none">
+      <div class="section-header">
+        <div class="section-title">Equipos registrados</div>
+        <div style="font-size:12px;color:var(--t3)">Los datos se editan en Google Sheets</div>
+      </div>
+      <div class="filters">
+        <input type="text" id="search" placeholder="Buscar equipo, hospital, proyecto..." oninput="renderTabla()">
+        <select id="f-estado" onchange="renderTabla()">
+          <option value="">Todos los estados</option>
+          <option>SIN AVANCE</option>
+          <option>ARMADO DE PLIEGO</option>
+          <option>PUBLICACION</option>
+          <option>EN EVALUACION</option>
+          <option>ADJUDICADO</option>
+          <option>FRACASADO</option>
+          <option>DESIERTO</option>
+          <option>NO SE COMPRO</option>
+        </select>
+        <select id="f-hosp" onchange="renderTabla()"><option value="">Todos los hospitales</option></select>
+        <select id="f-tipo" onchange="renderTabla()"><option value="">Todos los tipos de proyecto</option></select>
+      </div>
+      <div class="total-bar" id="total-bar"></div>
+      <div class="table-wrap">
+        <table class="main">
+          <thead><tr>
+            <th>Hospital</th><th>Equipo</th><th>Tipo equipo</th><th>Q total</th>
+            <th>P. Unit.</th><th>P. Total</th><th>Proyecto</th><th>Tipo proy.</th>
+            <th>Año entrega</th><th>Expediente</th><th>Licitacion</th>
+            <th>Apertura</th><th>Estado</th><th>Cheq.</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="empty" class="empty" style="display:none">Sin resultados.</div>
+      <div id="tfoot" style="font-size:12px;color:var(--t3);padding:8px 4px;text-align:right"></div>
+    </div>
+  </div>
 </div>
-
-<!-- TAB LICITACIONES -->
-<div id="tab-licitaciones" style="display:none">
-  <div id="licitaciones"></div>
-</div>
-
-<!-- TAB DISTRIBUCION -->
-<div id="tab-distribucion" style="display:none">
-  <div id="distribucion"></div>
-</div>
-
-</div>
-
 <script>
 var API_URL = 'https://script.google.com/macros/s/AKfycbzD-hJkihX-7wLb4DqUfGCYtIYRWEc2VdziaJ5h0EbMnZhCZAaKx67aoCCLY-Os7jD3/exec';
 
-var data = [];
+var ESTADOS = [
+  {v:'SIN AVANCE',    cls:'bs0', color:'#888780'},
+  {v:'ARMADO DE PLIEGO', cls:'bs1', color:'#7F77DD'},
+  {v:'PUBLICACION',   cls:'bs2', color:'#378ADD'},
+  {v:'EN EVALUACION', cls:'bs4', color:'#EF9F27'},
+  {v:'ADJUDICADO',    cls:'bs3', color:'#639922'},
+  {v:'FRACASADO',     cls:'bs5', color:'#E24B4A'},
+  {v:'DESIERTO',      cls:'bs6', color:'#B4B2A9'},
+  {v:'NO SE COMPRO',  cls:'bs7', color:'#A32D2D'}
+];
+var ESTADO_MAP = {};
+for (var i=0;i<ESTADOS.length;i++) ESTADO_MAP[ESTADOS[i].v] = ESTADOS[i];
+var ESTADOS_VALIDOS = {};
+for (var i=0;i<ESTADOS.length;i++) ESTADOS_VALIDOS[ESTADOS[i].v] = true;
+var TIPO_COLOR = {'OBRA':'#378ADD','SUMAR':'#1D9E75','SOLO PROYECTO':'#EF9F27','2027':'#888780'};
 
-function cargarDatos(){
-  fetch(API_URL)
-  .then(r=>r.json())
-  .then(d=>{
-    data = d;
-    renderFiltros();
-    renderTabla();
-  });
+var agrupados = [];
+var rawCount = 0;
+
+function splitCSVLine(line) {
+  var result = [], cur = '', inQ = false;
+  for (var i=0;i<line.length;i++) {
+    var c = line[i];
+    if (c==='"') { inQ=!inQ; }
+    else if (c===','&&!inQ) { result.push(cur); cur=''; }
+    else { cur+=c; }
+  }
+  result.push(cur);
+  return result;
 }
 
-function getMulti(id){
-  return Array.from(document.getElementById(id).selectedOptions).map(o=>o.value);
+function parseCSV(text) {
+  var lines = text.split('\n');
+  var headers = splitCSVLine(lines[0]);
+  var result = [];
+  for (var i=1;i<lines.length;i++) {
+    if (!lines[i].trim()) continue;
+    var vals = splitCSVLine(lines[i]);
+    var obj = {};
+    for (var j=0;j<headers.length;j++) obj[headers[j].trim()] = (vals[j]||'').trim();
+    result.push(obj);
+  }
+  return result;
 }
+
+function parseUSD(value) {
+  if (value === null || value === undefined || value === '') return 0;
+  if (typeof value === 'boolean') return 0;
+  if (typeof value === 'number') return isNaN(value) ? 0 : value;
+  var str = String(value).replace(/[^0-9.]/g, '');
+  var num = parseFloat(str);
+  return isNaN(num) ? 0 : num;
+}
+function fmtUSD(n) {
+  if (!n) return '\u2014';
+  return 'USD '+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtFecha(s) {
+  if (!s) return '\u2014';
+  var p=s.split('-');
+  return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : s;
+}
+function diasChip(f) {
+  if (!f) return '';
+  var hoy=new Date(); hoy.setHours(0,0,0,0);
+  var d=Math.ceil((new Date(f+'T00:00:00')-hoy)/86400000);
+  if (d<0)  return '<span class="dias-chip dias-gris">Vencida</span>';
+  if (d===0) return '<span class="dias-chip dias-rojo">Hoy</span>';
+  if (d<=7)  return '<span class="dias-chip dias-rojo">'+d+' dias</span>';
+  if (d<=30) return '<span class="dias-chip dias-naranja">'+d+' dias</span>';
+  return '<span class="dias-chip dias-verde">'+d+' dias</span>';
+}
+
+function badge(e) {
+  var info = ESTADO_MAP[e] || ESTADO_MAP['SIN AVANCE'];
+  return '<span class="badge '+info.cls+'">'+(e||'SIN AVANCE')+'</span>';
+}
+
+function getEstado(r) {
+  var e = (r['ESTADO']||'').trim().toUpperCase();
+  return ESTADOS_VALIDOS[e] ? e : 'SIN AVANCE';
+}
+
+function agrupar(rows) {
+  var mapa = {};
+  for (var i=0;i<rows.length;i++) {
+    var r = rows[i];
+    if (!r['HOSPITAL'] || r['HOSPITAL'].indexOf('CANTIDAD')===0) continue;
+    var key = r['HOSPITAL']+'|||'+r['EQUIPO']+'|||'+r['TIPO']+'|||'+r['NOMBRE PROYECTO'];
+    if (!mapa[key]) {
+      mapa[key] = {
+        hospital: r['HOSPITAL'],
+        equipo: r['EQUIPO'],
+        tipo: r['TIPO'],
+        q_total: 0,
+        p_unit: r['P. UNIT'],
+        p_total: 0,
+        chequeado: r['CHEQUEADO CON SP'],
+        tipo_proyecto: r['TIPO PROYECTO'],
+        anio_entrega: r['AÑO ENTREGA'],
+        nombre_proyecto: r['NOMBRE PROYECTO'],
+        estado: 'SIN AVANCE',
+        estado_orden: 0,
+        expediente: '',
+        licitacion: '',
+        fecha_apertura: '',
+        observacion: r['OBSERVACION']
+      };
+    }
+    var g = mapa[key];
+    var q = parseInt(r['Q SOLICIT.'])||0;
+    g.q_total += q;
+    g.p_total += parseUSD(r['P. TOTAL']);
+    var e = getEstado(r);
+    var eIdx = -1;
+    for (var j=0;j<ESTADOS.length;j++) { if (ESTADOS[j].v===e) { eIdx=j; break; } }
+    if (eIdx > g.estado_orden) { g.estado=e; g.estado_orden=eIdx; }
+    if (r['FECHA DE APERTURA'] && !g.fecha_apertura) g.fecha_apertura=r['FECHA DE APERTURA'];
+    if (r['EXPEDIENTE'] && !g.expediente) g.expediente=r['EXPEDIENTE'];
+    if (r['LICITACION'] && !g.licitacion) g.licitacion=r['LICITACION'];
+    if (r['AÑO ENTREGA'] && !g.anio_entrega) g.anio_entrega=r['AÑO ENTREGA'];
+  }
+  var result=[];
+  for (var k in mapa) result.push(mapa[k]);
+  return result;
+}
+
+function cargarDatos(manual) {
+  var dot=document.getElementById('sync-dot'), lbl=document.getElementById('sync-label');
+  dot.className='sync-dot loading'; lbl.textContent='Cargando...';
+  var cbName = 'cb_' + Date.now();
+  var script = document.createElement('script');
+  var timeout = setTimeout(function(){
+    dot.className='sync-dot error'; lbl.textContent='Error al cargar';
+    document.getElementById('loading-screen').innerHTML='<p style="color:#E24B4A;font-size:14px">No se pudo cargar el Sheet.<br><br><button onclick="cargarDatos(true)" style="margin-top:8px;padding:6px 14px;font-size:13px;border:0.5px solid rgba(0,0,0,0.25);border-radius:8px;background:#fff;cursor:pointer">Reintentar</button></p>';
+    delete window[cbName];
+    if(script.parentNode) script.parentNode.removeChild(script);
+  }, 10000);
+  window[cbName] = function(rows){
+    clearTimeout(timeout);
+    delete window[cbName];
+    if(script.parentNode) script.parentNode.removeChild(script);
+    rawCount=rows.filter(function(r){return r['HOSPITAL']&&String(r['HOSPITAL']).indexOf('CANTIDAD')!==0;}).length;
+    agrupados=agrupar(rows);
+    dot.className='sync-dot';
+    var now=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+    lbl.textContent='Actualizado '+now;
+    document.getElementById('header-count').textContent=agrupados.length+' equipos unicos';
+    document.getElementById('loading-screen').style.display='none';
+    document.getElementById('app').style.display='';
+    renderDash(); renderFiltros();
+  };
+  script.src = API_URL + '?callback=' + cbName + '&nocache=' + Date.now();
+  script.onerror = function(){
+    clearTimeout(timeout);
+    dot.className='sync-dot error'; lbl.textContent='Error al cargar';
+    document.getElementById('loading-screen').innerHTML='<p style="color:#E24B4A;font-size:14px">No se pudo cargar el Sheet.<br><br><button onclick="cargarDatos(true)" style="margin-top:8px;padding:6px 14px;font-size:13px;border:0.5px solid rgba(0,0,0,0.25);border-radius:8px;background:#fff;cursor:pointer">Reintentar</button></p>';
+    delete window[cbName];
+  };
+  document.head.appendChild(script);
+}
+
+function showTab(t) {
+  var all=['dashboard','proyectos','distribucion','equipos'];
+  for (var i=0;i<all.length;i++) document.getElementById('tab-'+all[i]).style.display=all[i]===t?'':'none';
+  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',all[i]===t);});
+  if(t==='dashboard') renderDash();
+  if(t==='proyectos') renderProyectos();
+  if(t==='distribucion') renderDistribucion();
+  if(t==='equipos') renderTabla();
+}
+
+function barChart(id,counts,colorFn) {
+  var el=document.getElementById(id); if(!el) return;
+  var entries=Object.entries(counts).sort(function(a,b){return b[1]-a[1];});
+  var max=1; for(var i=0;i<entries.length;i++) if(entries[i][1]>max) max=entries[i][1];
+  var html='';
+  for(var i=0;i<entries.length;i++){
+    var k=entries[i][0],v=entries[i][1];
+    html+='<div class="bar-row"><div class="bar-label" title="'+k+'">'+(k||'\u2014')+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(v/max*100)+'%;background:'+colorFn(k)+'"></div></div><div class="bar-count">'+v+'</div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function renderDash() {
+  var total=agrupados.length; if(!total) return;
+  var conAp=0,cheq=0,hospsSet={},totalUSD=0;
+  for(var i=0;i<agrupados.length;i++){
+    var d=agrupados[i];
+    if(d.fecha_apertura) conAp++;
+    if(d.chequeado==='TRUE') cheq++;
+    hospsSet[d.hospital]=1;
+    totalUSD+=d.p_total;
+  }
+  document.getElementById('metrics').innerHTML=
+    '<div class="metric"><div class="metric-label">Equipos unicos</div><div class="metric-value">'+total+'</div><div class="metric-sub">'+rawCount+' filas en Sheet</div></div>'+
+    '<div class="metric"><div class="metric-label">Hospitales</div><div class="metric-value">'+Object.keys(hospsSet).length+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Monto total estimado</div><div class="metric-value" style="font-size:15px">'+fmtUSD(totalUSD)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Con fecha apertura</div><div class="metric-value">'+conAp+'</div><div class="metric-sub">'+Math.round(conAp/total*100)+'% del total</div></div>'+
+    '<div class="metric"><div class="metric-label">Chequeados con SP</div><div class="metric-value">'+cheq+'</div><div class="metric-sub">'+Math.round(cheq/total*100)+'% del total</div></div>';
+
+  var counts={};
+  for(var i=0;i<ESTADOS.length;i++) counts[ESTADOS[i].v]=0;
+  for(var i=0;i<agrupados.length;i++) { var e=agrupados[i].estado; counts[e]=(counts[e]||0)+1; }
+
+  var genHTML='',legendHTML='',progHTML='';
+  for(var i=0;i<ESTADOS.length;i++){
+    var est=ESTADOS[i], c=counts[est.v]||0, pct=Math.round(c/total*100);
+    genHTML+='<div class="prog-seg" style="width:'+pct+'%;background:'+est.color+'" title="'+est.v+': '+c+' ('+pct+'%)"></div>';
+    legendHTML+='<div class="prog-legend-item"><div class="prog-dot" style="background:'+est.color+'"></div><span>'+est.v+' ('+c+')</span></div>';
+    progHTML+='<div class="prog-single"><div class="prog-header"><span class="prog-name">'+est.v+'</span><span class="prog-pct">'+c+' equipos &middot; '+pct+'%</span></div><div class="prog-track"><div class="prog-fill" style="width:'+pct+'%;background:'+est.color+'"></div></div></div>';
+  }
+  document.getElementById('prog-gen').innerHTML=genHTML;
+  document.getElementById('prog-legend').innerHTML=legendHTML;
+  document.getElementById('prog-estados').innerHTML=progHTML;
+
+  var hospC={};
+  for(var i=0;i<agrupados.length;i++){hospC[agrupados[i].hospital]=(hospC[agrupados[i].hospital]||0)+1;}
+  barChart('ch-hosp',Object.fromEntries(Object.entries(hospC).sort(function(a,b){return b[1]-a[1];}).slice(0,10)),function(){return '#7F77DD';});
+
+  var tipoC={};
+  for(var i=0;i<agrupados.length;i++){var t=agrupados[i].tipo_proyecto;if(t)tipoC[t]=(tipoC[t]||0)+1;}
+  barChart('ch-tipo',tipoC,function(k){return TIPO_COLOR[k]||'#888780';});
+
+  var hoy=new Date(); hoy.setHours(0,0,0,0);
+  var prox=[];
+  for(var i=0;i<agrupados.length;i++){
+    if(agrupados[i].fecha_apertura){
+      var diff=Math.ceil((new Date(agrupados[i].fecha_apertura+'T00:00:00')-hoy)/86400000);
+      prox.push({d:agrupados[i],diff:diff});
+    }
+  }
+  prox.sort(function(a,b){return a.diff-b.diff;}); prox=prox.slice(0,10);
+  var apEl=document.getElementById('ch-apertura');
+  if(!prox.length){
+    apEl.innerHTML='<div style="color:var(--t3);font-size:13px;padding:8px">Ningun equipo tiene fecha de apertura cargada.</div>';
+  } else {
+    var rows='';
+    for(var i=0;i<prox.length;i++){
+      var d=prox[i].d;
+      rows+='<tr><td style="font-weight:500">'+d.hospital+'</td><td>'+d.equipo+'</td><td style="color:var(--t2)">'+(d.nombre_proyecto||'\u2014')+'</td><td style="color:var(--t3)">'+(d.expediente||'\u2014')+'</td><td style="white-space:nowrap">'+fmtFecha(d.fecha_apertura)+'</td><td>'+badge(d.estado)+'</td><td>'+diasChip(d.fecha_apertura)+'</td></tr>';
+    }
+    apEl.innerHTML='<table class="urg-table"><thead><tr><th>Hospital</th><th>Equipo</th><th>Proyecto</th><th>Expediente</th><th>Fecha</th><th>Estado</th><th>Dias</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }
+}
+
+function renderProyectos() {
+  var grupos={};
+  for(var i=0;i<agrupados.length;i++){
+    var d=agrupados[i], k=d.nombre_proyecto||'(sin proyecto)';
+    if(!grupos[k]) grupos[k]=[];
+    grupos[k].push(d);
+  }
+  var sorted=Object.entries(grupos).sort(function(a,b){return b[1].length-a[1].length;});
+  var totalGral=0; for(var i=0;i<agrupados.length;i++) totalGral+=agrupados[i].p_total;
+  document.getElementById('proy-total').textContent='Total: '+fmtUSD(totalGral)+' \u00b7 '+sorted.length+' proyectos';
+  var html='';
+  for(var idx=0;idx<sorted.length;idx++){
+    var nombre=sorted[idx][0], items=sorted[idx][1];
+    var monto=0; for(var i=0;i<items.length;i++) monto+=items[i].p_total;
+    var hospsSet={}; for(var i=0;i<items.length;i++) hospsSet[items[i].hospital]=1;
+    var hosps=Object.keys(hospsSet).sort().join(', ');
+    var estados={};
+    for(var i=0;i<items.length;i++){var e=items[i].estado; estados[e]=(estados[e]||0)+1;}
+    var badgesHTML='';
+    for(var e in estados) badgesHTML+=badge(e)+' <span style="font-size:11px;color:var(--t3)">\u00d7'+estados[e]+'</span> ';
+    var rowsHTML='';
+    for(var i=0;i<items.length;i++){
+      var d=items[i];
+      rowsHTML+='<tr><td style="font-weight:500">'+d.hospital+'</td><td>'+d.equipo+'</td><td style="color:var(--t2)">'+(d.tipo||'\u2014')+'</td><td style="text-align:center;font-weight:500">'+(d.q_total||'\u2014')+'</td><td style="white-space:nowrap">'+fmtUSD(d.p_total)+'</td><td style="white-space:nowrap">'+fmtFecha(d.fecha_apertura)+'</td><td>'+diasChip(d.fecha_apertura)+'</td><td>'+badge(d.estado)+'</td></tr>';
+    }
+    html+='<div class="proy-card"><div class="proy-header" onclick="toggleProy('+idx+')"><div style="flex:1"><div class="proy-name">'+nombre+'</div><div style="font-size:11px;color:var(--t3);margin-top:2px">'+hosps+'</div><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">'+badgesHTML+'</div></div><div class="proy-meta"><span class="proy-count">'+items.length+' equipos</span><span class="proy-monto">'+fmtUSD(monto)+'</span><span class="proy-arrow" id="arrow-'+idx+'">\u25b6</span></div></div><div class="proy-body" id="proy-body-'+idx+'"><table class="proy-table"><thead><tr><th>Hospital</th><th>Equipo</th><th>Tipo</th><th>Q total</th><th>P. Total</th><th>Apertura</th><th>Dias</th><th>Estado</th></tr></thead><tbody>'+rowsHTML+'</tbody></table></div></div>';
+  }
+  document.getElementById('proy-container').innerHTML=html;
+}
+
+function toggleProy(idx){
+  document.getElementById('proy-body-'+idx).classList.toggle('open');
+  document.getElementById('arrow-'+idx).classList.toggle('open');
+}
+
+/* ══════════════════════════════════════════════
+   DISTRIBUCIÓN — agrupado por licitación
+   Nivel 1: Licitación
+   Nivel 2: Renglón (equipo + tipo)
+     → cantidad total, cantidad por hospital, monto
+   ══════════════════════════════════════════════ */
+function renderDistribucion() {
+  /* Agrupar por licitacion → renglón */
+  var lics = {};
+  for (var i = 0; i < agrupados.length; i++) {
+    var d = agrupados[i];
+    var licKey = d.licitacion || '(sin licitación)';
+    if (!lics[licKey]) lics[licKey] = { items: [], monto: 0, q: 0 };
+    lics[licKey].items.push(d);
+    lics[licKey].monto += d.p_total;
+    lics[licKey].q += d.q_total;
+  }
+
+  /* Ordenar licitaciones por monto desc */
+  var licArr = [];
+  for (var k in lics) licArr.push({ nombre: k, data: lics[k] });
+  licArr.sort(function(a, b){ return b.data.monto - a.data.monto; });
+
+  /* Totales para el summary bar */
+  var totalMonto = 0, totalEquipos = 0, totalLics = licArr.length;
+  for (var i = 0; i < agrupados.length; i++) totalMonto += agrupados[i].p_total;
+  totalEquipos = agrupados.length;
+
+  document.getElementById('dist-total').textContent =
+    totalLics + ' licitaciones \u00b7 ' + totalEquipos + ' renglones';
+  document.getElementById('dist-summary-bar').innerHTML =
+    '<span class="total-label">Monto total:</span>' +
+    '<span class="total-value">' + fmtUSD(totalMonto) + '</span>' +
+    '<span class="total-sub">' + totalLics + ' licitaciones \u00b7 ' + totalEquipos + ' renglones</span>';
+
+  var html = '';
+  for (var li = 0; li < licArr.length; li++) {
+    var lic = licArr[li];
+    var nombre = lic.nombre;
+    var items = lic.data.items;
+    var monto = lic.data.monto;
+
+    /* Agrupar renglones dentro de la licitación por equipo+tipo */
+    var renglones = {};
+    for (var i = 0; i < items.length; i++) {
+      var d = items[i];
+      var rKey = (d.equipo || '(sin nombre)') + '|||' + (d.tipo || '');
+      if (!renglones[rKey]) renglones[rKey] = { equipo: d.equipo, tipo: d.tipo, q_total: 0, monto: 0, hospitales: {}, estados: {} };
+      var rg = renglones[rKey];
+      rg.q_total += d.q_total;
+      rg.monto += d.p_total;
+      /* cantidad por hospital */
+      if (!rg.hospitales[d.hospital]) rg.hospitales[d.hospital] = { q: 0, monto: 0 };
+      rg.hospitales[d.hospital].q += d.q_total;
+      rg.hospitales[d.hospital].monto += d.p_total;
+      /* estados */
+      rg.estados[d.estado] = (rg.estados[d.estado] || 0) + 1;
+    }
+
+    /* Convertir renglones a array y ordenar por monto desc */
+    var rgArr = [];
+    for (var k in renglones) rgArr.push(renglones[k]);
+    rgArr.sort(function(a, b){ return b.monto - a.monto; });
+
+    /* Badges de estados de la licitación completa */
+    var estadosLic = {};
+    for (var i = 0; i < items.length; i++) estadosLic[items[i].estado] = (estadosLic[items[i].estado]||0)+1;
+    var badgesLic = '';
+    for (var e in estadosLic) badgesLic += badge(e) + ' <span style="font-size:11px;color:var(--t3)">\u00d7' + estadosLic[e] + '</span> ';
+
+    /* Fecha apertura de la licitación (primera disponible) */
+    var fechaLic = '';
+    for (var i = 0; i < items.length; i++) { if (items[i].fecha_apertura) { fechaLic = items[i].fecha_apertura; break; } }
+
+    /* Hospitales involucrados */
+    var hospsLic = {};
+    for (var i = 0; i < items.length; i++) hospsLic[items[i].hospital] = 1;
+    var hospsStr = Object.keys(hospsLic).sort().join(', ');
+
+    /* Renglones HTML */
+    var renglonesHTML = '';
+    for (var ri = 0; ri < rgArr.length; ri++) {
+      var rg = rgArr[ri];
+      var rIdx = li + '_' + ri;
+
+      /* Tabla por hospital */
+      var hospRows = '';
+      var hospArr = [];
+      for (var h in rg.hospitales) hospArr.push({ nombre: h, q: rg.hospitales[h].q, monto: rg.hospitales[h].monto });
+      hospArr.sort(function(a,b){ return b.q - a.q; });
+      for (var hi = 0; hi < hospArr.length; hi++) {
+        hospRows += '<tr>' +
+          '<td style="font-weight:500">' + hospArr[hi].nombre + '</td>' +
+          '<td style="text-align:center;font-weight:500">' + (hospArr[hi].q || '\u2014') + '</td>' +
+          '<td style="white-space:nowrap">' + fmtUSD(hospArr[hi].monto) + '</td>' +
+          '</tr>';
+      }
+
+      /* Badges de estado del renglón */
+      var badgesRg = '';
+      for (var e in rg.estados) badgesRg += badge(e) + ' ';
+
+      renglonesHTML +=
+        '<div class="dist-renglon">' +
+          '<div class="dist-renglon-header" onclick="toggleRenglon(\'' + rIdx + '\')">' +
+            '<div>' +
+              '<div class="dist-renglon-name">' + (rg.equipo || '\u2014') + '</div>' +
+              '<div class="dist-renglon-sub">' + (rg.tipo || '') + (rg.tipo && badgesRg ? ' \u00b7 ' : '') + badgesRg + '</div>' +
+            '</div>' +
+            '<div class="dist-renglon-stats">' +
+              '<span class="dist-renglon-q">' + (rg.q_total || 0) + ' uds \u00b7 ' + hospArr.length + ' hosp.</span>' +
+              '<span class="dist-renglon-monto">' + fmtUSD(rg.monto) + '</span>' +
+              '<span class="dist-renglon-arrow" id="rg-arrow-' + rIdx + '">\u25b6</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dist-renglon-body" id="rg-body-' + rIdx + '">' +
+            '<table class="dist-hosp-table">' +
+              '<thead><tr>' +
+                '<th>Hospital</th>' +
+                '<th style="text-align:center">Cantidad</th>' +
+                '<th>Monto</th>' +
+              '</tr></thead>' +
+              '<tbody>' + hospRows + '</tbody>' +
+              '<tfoot><tr style="border-top:0.5px solid var(--b1)">' +
+                '<td style="font-weight:500;color:var(--t2);font-size:11px;padding:5px 8px">TOTAL</td>' +
+                '<td style="text-align:center;font-weight:500;padding:5px 8px">' + (rg.q_total || '\u2014') + '</td>' +
+                '<td style="font-weight:500;white-space:nowrap;padding:5px 8px">' + fmtUSD(rg.monto) + '</td>' +
+              '</tr></tfoot>' +
+            '</table>' +
+          '</div>' +
+        '</div>';
+    }
+
+    html +=
+      '<div class="dist-card">' +
+        '<div class="dist-header" onclick="toggleDist(' + li + ')">' +
+          '<div style="flex:1">' +
+            '<div class="proy-name">' + nombre + '</div>' +
+            '<div style="font-size:11px;color:var(--t3);margin-top:2px">' + hospsStr + '</div>' +
+            '<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">' + badgesLic + '</div>' +
+          '</div>' +
+          '<div class="proy-meta">' +
+            (fechaLic ? '<span style="font-size:12px;color:var(--t2)">Apertura: ' + fmtFecha(fechaLic) + ' ' + diasChip(fechaLic) + '</span>' : '') +
+            '<span class="proy-count">' + rgArr.length + ' renglones</span>' +
+            '<span class="proy-monto">' + fmtUSD(monto) + '</span>' +
+            '<span class="proy-arrow" id="dist-arrow-' + li + '">\u25b6</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dist-body" id="dist-body-' + li + '">' + renglonesHTML + '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('dist-container').innerHTML = html || '<div class="empty">Sin datos de licitaciones.</div>';
+}
+
+function toggleDist(idx) {
+  document.getElementById('dist-body-' + idx).classList.toggle('open');
+  document.getElementById('dist-arrow-' + idx).classList.toggle('open');
+}
+
+function toggleRenglon(rIdx) {
+  document.getElementById('rg-body-' + rIdx).classList.toggle('open');
+  document.getElementById('rg-arrow-' + rIdx).classList.toggle('open');
+}
+/* ══════════════════════════════════════════════ */
 
 function renderFiltros(){
-  let estados={},hosp={},tipo={},proy={};
-
-  data.forEach(d=>{
-    estados[d.ESTADO]=1;
-    hosp[d.HOSPITAL]=1;
-    tipo[d['TIPO PROYECTO']]=1;
-    proy[d['NOMBRE PROYECTO']]=1;
-  });
-
-  fillSelect('f-estado',estados);
-  fillSelect('f-hosp',hosp);
-  fillSelect('f-tipo',tipo);
-  fillSelect('f-proy',proy);
-}
-
-function fillSelect(id,obj){
-  document.getElementById(id).innerHTML =
-    Object.keys(obj).map(v=>`<option>${v}</option>`).join('');
+  var hospsSet={},tiposSet={};
+  for(var i=0;i<agrupados.length;i++){
+    if(agrupados[i].hospital) hospsSet[agrupados[i].hospital]=1;
+    if(agrupados[i].tipo_proyecto) tiposSet[agrupados[i].tipo_proyecto]=1;
+  }
+  var hosps=Object.keys(hospsSet).sort(), tipos=Object.keys(tiposSet).sort();
+  var selH=document.getElementById('f-hosp'), selT=document.getElementById('f-tipo');
+  selH.innerHTML='<option value="">Todos los hospitales</option>'+hosps.map(function(h){return '<option>'+h+'</option>';}).join('');
+  selT.innerHTML='<option value="">Todos los tipos de proyecto</option>'+tipos.map(function(t){return '<option>'+t+'</option>';}).join('');
 }
 
 function renderTabla(){
-  let q = document.getElementById('search').value.toLowerCase();
-  let fE=getMulti('f-estado'), fH=getMulti('f-hosp'), fT=getMulti('f-tipo'), fP=getMulti('f-proy');
-
-  let filtered = data.filter(d=>{
-    if(fE.length && !fE.includes(d.ESTADO)) return false;
-    if(fH.length && !fH.includes(d.HOSPITAL)) return false;
-    if(fT.length && !fT.includes(d['TIPO PROYECTO'])) return false;
-    if(fP.length && !fP.includes(d['NOMBRE PROYECTO'])) return false;
-
-    let txt = JSON.stringify(d).toLowerCase();
-    return txt.includes(q);
-  });
-
-  let html = '';
-  filtered.forEach(d=>{
-    html += `<div class="card">
-      <b>${d.EQUIPO}</b> - ${d.HOSPITAL}<br>
-      ${d.ESTADO} | ${d['NOMBRE PROYECTO']}
-    </div>`;
-  });
-
-  document.getElementById('tabla').innerHTML = html;
-}
-
-function renderLicitaciones(){
-  let map = {};
-  data.forEach(d=>{
-    let k = d.LICITACION || 'SIN LICITACION';
-    if(!map[k]) map[k]=[];
-    map[k].push(d);
-  });
-
-  let html='';
-  for(let k in map){
-    html += `<div class="card">
-      <b>${k}</b><br>
-      ${map[k].length} equipos
-    </div>`;
+  var q=(document.getElementById('search').value||'').toLowerCase();
+  var fE=document.getElementById('f-estado').value||'';
+  var fH=document.getElementById('f-hosp').value||'';
+  var fT=document.getElementById('f-tipo').value||'';
+  var filtered=[];
+  for(var i=0;i<agrupados.length;i++){
+    var d=agrupados[i];
+    if(fE&&d.estado!==fE) continue;
+    if(fH&&d.hospital!==fH) continue;
+    if(fT&&d.tipo_proyecto!==fT) continue;
+    if(q){var txt=(d.hospital+d.equipo+d.tipo+d.nombre_proyecto+d.expediente+d.licitacion).toLowerCase();if(txt.indexOf(q)===-1) continue;}
+    filtered.push(d);
   }
-
-  document.getElementById('licitaciones').innerHTML=html;
-}
-
-function renderDistribucion(){
-  let map = {};
-
-  data.forEach(d=>{
-    let key = d.EQUIPO;
-    if(!map[key]) map[key]={total:0,h:{}};
-
-    map[key].total++;
-
-    if(!map[key].h[d.HOSPITAL]) map[key].h[d.HOSPITAL]=0;
-    map[key].h[d.HOSPITAL]++;
-  });
-
-  let html='';
-
-  for(let k in map){
-    let hosp = Object.entries(map[k].h).map(([h,q])=>`${h} (${q})`).join(', ');
-
-    html += `<div class="card">
-      <b>${k}</b><br>
-      Total: ${map[k].total}<br>
-      ${hosp}
-    </div>`;
+  var totalF=0,totalG=0;
+  for(var i=0;i<filtered.length;i++) totalF+=filtered[i].p_total;
+  for(var i=0;i<agrupados.length;i++) totalG+=agrupados[i].p_total;
+  document.getElementById('total-bar').innerHTML='<span class="total-label">Total visible:</span><span class="total-value">'+fmtUSD(totalF)+'</span><span class="total-sub">de '+fmtUSD(totalG)+' total &middot; '+filtered.length+' de '+agrupados.length+' equipos</span>';
+  var tbody=document.getElementById('tbody'), empty=document.getElementById('empty');
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='';return;}
+  empty.style.display='none';
+  var rows='';
+  for(var i=0;i<filtered.length;i++){
+    var d=filtered[i];
+    rows+='<tr>'+
+      '<td style="font-weight:500">'+d.hospital+'</td>'+
+      '<td>'+d.equipo+'</td>'+
+      '<td style="color:var(--t2)">'+(d.tipo||'\u2014')+'</td>'+
+      '<td style="text-align:center;font-weight:500">'+(d.q_total||'\u2014')+'</td>'+
+      '<td style="white-space:nowrap">'+(d.p_unit||'\u2014')+'</td>'+
+      '<td style="white-space:nowrap">'+fmtUSD(d.p_total)+'</td>'+
+      '<td style="color:var(--t2);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+(d.nombre_proyecto||'')+'">'+(d.nombre_proyecto||'\u2014')+'</td>'+
+      '<td>'+(d.tipo_proyecto||'\u2014')+'</td>'+
+      '<td style="color:var(--t3);text-align:center">'+(d.anio_entrega||'\u2014')+'</td>'+
+      '<td style="color:var(--t3)">'+(d.expediente||'\u2014')+'</td>'+
+      '<td style="color:var(--t3)">'+(d.licitacion||'\u2014')+'</td>'+
+      '<td style="white-space:nowrap">'+fmtFecha(d.fecha_apertura)+' '+diasChip(d.fecha_apertura)+'</td>'+
+      '<td>'+badge(d.estado)+'</td>'+
+      '<td><span class="tag-cheq '+(d.chequeado==='TRUE'?'tag-si':'tag-no')+'">'+(d.chequeado==='TRUE'?'Si':'No')+'</span></td>'+
+    '</tr>';
   }
-
-  document.getElementById('distribucion').innerHTML=html;
+  tbody.innerHTML=rows;
+  document.getElementById('tfoot').textContent='Mostrando '+filtered.length+' de '+agrupados.length+' equipos unicos';
 }
 
-function showTab(t){
-  document.getElementById('tab-equipos').style.display='none';
-  document.getElementById('tab-licitaciones').style.display='none';
-  document.getElementById('tab-distribucion').style.display='none';
-
-  document.getElementById('tab-'+t).style.display='block';
-
-  if(t==='licitaciones') renderLicitaciones();
-  if(t==='distribucion') renderDistribucion();
-}
-
-cargarDatos();
+cargarDatos(false);
 </script>
-
 </body>
 </html>
